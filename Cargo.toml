@@ -1,9 +1,9 @@
 [package]
-name = "ssdp"
+name = "simple-ssdp"
 version = "0.1.0"
 edition = "2021"
 description = "A SSDP implementation"
-repository = "https://github.com/MrFastDie/ssdp"
+repository = "https://github.com/MrFastDie/simple-ssdp"
 license = "MIT OR Apache-2.0"
 keywords = ["broadcast", "ssdp", "upnp", "network", "discovery"]
 authors = ["MrFastDie <daniel.hackbarth96@gmail.com>"]
