@@ -13,3 +13,4 @@ readme = "README.md"
 tokio = { version = "1.38.0", features = ["macros", "net", "rt", "rt-multi-thread", "time"] }
 httparse = "1.9.4"
 log = "0.4.22"
+socket2 = "0.5.7"

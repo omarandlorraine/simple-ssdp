@@ -73,12 +73,25 @@ impl Service {
         }
     }
 
+    async fn make_socket(&self) -> UdpSocket {
+        let local_addr = SocketAddr::from((Ipv4Addr::UNSPECIFIED, SSDP_PORT));
+        let s = {
+            use socket2::{Domain, Protocol, Socket, Type};
+            let s = Socket::new(Domain::IPV4, Type::DGRAM, Some(Protocol::UDP)).unwrap();
+            s.set_reuse_address(true).unwrap();
+            s.set_nonblocking(true).unwrap();
+            s.bind(&SocketAddr::from(local_addr).into()).unwrap();
+            s
+        };
+        let socket = Arc::new(UdpSocket::from_std(s.into()).unwrap());
+        UdpSocket::bind(local_addr).await.unwrap()
+    }
+
     /// Opens the listener
     ///
     /// This process is blocking so best to start it in its own thread
     pub async fn listen(&self, address: MulticastAddr) -> Result<(), Box<dyn std::error::Error>> {
-        let local_addr = SocketAddr::from((Ipv4Addr::UNSPECIFIED, SSDP_PORT));
-        let socket = Arc::new(UdpSocket::bind(local_addr).await?);
+        let socket = Arc::new(self.make_socket().await);
 
         join_socket(&address, socket.clone())?;
 
